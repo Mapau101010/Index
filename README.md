@@ -1,0 +1,2 @@
+# Index
+Este Repositorio se creo con la finalidad de mostrar distintas variables en Rstudio.
