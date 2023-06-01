@@ -75,7 +75,7 @@ coffee_quality |>
 ```{r}
 #| label: histograma
 #| warning: false
-#| code-fold: false
+#| code-fold: true
 
 # Cargar datos desde el archivo CSV 
 
@@ -121,5 +121,29 @@ grafico_interactivo <- ggplotly(grafico_con_tendencia, tooltip = c("Altitude", "
 
 grafico_interactivo
 
+```
+
+```{r}
+#| label: Gráfico de caja 
+#| warning: false
+#| code-fold: true
+
+# Diagrama de caja de la variable Total_Cup_Points y Color
+
+datos <- read.csv("coffee-quality.csv")
+grafico <- ggplot(datos, aes(x = Color, y = Total_Cup_Points)) +
+  geom_boxplot(aes(color = Total_Cup_Points), width = 0.3, show.legend = FALSE) +
+  scale_color_manual(values = c("darkorange", "purple", "cyan4")) +
+  xlab("Color") +
+  ylab("Total_Cup_Points")+
+  theme_dark(base_size = 12)+
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 30, hjust = 1))
+
+
+
+grafico_interactivo <- ggplotly(grafico, tooltip = c("Color", "Total_Cup_Points"))
+
+grafico_interactivo
 ```
 
