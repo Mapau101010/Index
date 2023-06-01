@@ -1,0 +1,125 @@
+---
+title: "Tarea"
+author: "Paulina Murillo"
+format: 
+  html:
+    theme: "cyborg"
+    lang: es
+    toc: true
+---
+
+
+## Introducción
+Este documento consiste en demostrar a base de gráficos con los paquetes de ggplot2 y plotly de R información sobre las cualidades de los tipos de café.
+
+Los datos son extraídos del Coffee Quality Institute (CQI) y de su página web por Fatih Boyar. Corresponden a muestras de café de diferentes partes del mundo, para las que se registraron propiedades como país de origen, altitud, variedad, color y método de procesamiento y se evaluaron características como aroma, sabor, acidez y puntaje total, entre otra, datos que van a ser reflejados en gráficos.
+
+
+### instalación de paquetes
+
+install.packages("tidyverse")
+install.packages("plotly")
+install.packages("DT")
+install.packages("ggthemes")
+install.packages("hrbrthemes")
+install.packages("ggplot2")
+
+# carga de paquetes
+```{r}
+#| label: carga-paquetes
+#| Warning: false
+#| message: false
+
+
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+library(DT)
+library(ggthemes)
+library(hrbrthemes)
+library(readr)
+```
+
+```{r}
+#| label: carga de datos
+#| warning: false
+#| code-fold: true
+
+
+
+# carga de datos de coffee-quality
+
+coffee_quality <-
+  read_delim(file =  "coffee-quality.csv",
+             col_select = c(
+               "Country_of_Origin",
+               "Variety",
+               "Color",
+               "Altitude",
+               "Total_Cup_Points")
+    )
+
+# Despliegue los datos
+coffee_quality |>
+  datatable(
+    options = list(
+      pageLength = 10,
+      language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+    )
+  )
+
+```
+
+## Gráfica estadística - Histograma
+
+```{r}
+#| label: histograma
+#| warning: false
+#| code-fold: false
+
+# Cargar datos desde el archivo CSV 
+
+data <- read_csv("coffee-quality.csv")
+
+histogram <- ggplot(data, aes(x = Total_Cup_Points)) +
+  geom_histogram(bins = 20, fill = "red", color = "pink", alpha = 0.5) +
+  geom_density(color = "yellow") +
+  labs(title = "Histograma", x = "Total_Cup_Points", y = "Frecuencia") +
+  theme_grey()
+
+# Convertir el histograma en interactivo
+plotly_histogram <- ggplotly(histogram)
+
+#Curva
+
+plotly_histogram
+
+
+```
+
+
+```{r}
+#| label: Gráfico de dispersión 
+#| warning: false
+#| code-fold: true
+
+# Graficación de dispersión Altitude vs Total_Cup_Points
+
+datos <- read.csv("coffee-quality.csv")
+
+grafico <- ggplot(datos, aes(x = Total_Cup_Points , y = Altitude))+
+  geom_point() +
+  labs(title = "Gráfico de dispersión Altitude vs Total_Cup_Points",
+       x = "Total_Cup_Points",
+       y = "Altitude") +
+  theme_gray()
+
+grafico_con_tendencia <- grafico +
+  geom_smooth(method = "lm", se = FALSE)
+
+grafico_interactivo <- ggplotly(grafico_con_tendencia, tooltip = c("Altitude", "Total_Cup_Points"))
+
+grafico_interactivo
+
+```
+
